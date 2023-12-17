@@ -1,20 +1,12 @@
-name: ds
+name: pro-odoroki
 
 channels:
   - conda-forge
 
 dependencies:
-  - ipython
-  - ipykernel
-  - python
-  - numpy
-  - matplotlib
-  - altair
-  - scikit-learn
-  - pandas
-  - pytorch
-  - tensorflow
-  - jinja2
+  - python==3.11
+  - pytest
+  - pytest-cov
   - pre-commit
   - pip
   - pip:
