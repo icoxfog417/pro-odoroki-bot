@@ -1,0 +1,19 @@
+{
+  "version": "2.0",
+  "app_name": "pro-odoroki-bot",
+  "stages": {
+    "dev": {
+      "api_gateway_stage": "api",
+      "environment_variables": {
+        "SLACK_SIGNING_SECRET": "xxxxx",
+        "SLACK_CLIENT_ID": "1111.1111",
+        "SLACK_CLIENT_SECRET": "xxxxx",
+        "SLACK_SCOPES": "app_mentions:read,channels:history,im:history,chat:write",
+        "SLACK_INSTALLATION_S3_BUCKET_NAME": "xxxxx",
+        "SLACK_STATE_S3_BUCKET_NAME": "xxxxx"
+      },
+      "autogen_policy": false,
+      "automatic_layer": true
+    }
+  }
+}

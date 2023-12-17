@@ -1,0 +1,6 @@
+.chalice/config.json
+.chalice/policy-dev.json
+.chalice/deployments/
+.chalice/venv/
+.chalice/deployed/
+vendor/

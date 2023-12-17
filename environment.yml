@@ -10,4 +10,4 @@ dependencies:
   - pre-commit
   - pip
   - pip:
-    - -r requirements.txt
+    - -r aws_chalice/requirements.txt
