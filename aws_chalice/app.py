@@ -44,7 +44,9 @@ def handle_app_message(message: dict, say: Say, logger: logging.Logger) -> None:
     prompt_body = pog.generate(_message)
     bedrock = Bedrock()
     reply = bedrock.ask_to_claude(prompt_body, instant=True)
-    say(f"{reply}", thread_ts=ts)
+    logger.info(f"Generated response: {reply}")
+    reply_dict = pog.retrieve(reply)
+    say(f"{reply_dict.get('reaction')}", thread_ts=ts)
 
 
 def respond_to_slack_within_3_seconds(ack: Ack) -> None:
@@ -54,10 +56,12 @@ def respond_to_slack_within_3_seconds(ack: Ack) -> None:
 bolt_app.event("app_mention")(
     ack=respond_to_slack_within_3_seconds, lazy=[handle_app_mentions]
 )
+
 AI_KEYWORDS = ["ChatGPT", "OpenAI", "Bedrock", "Amazon Q", "Gemini", "DeepMind"]
-bolt_app.message(re.compile("|".join(AI_KEYWORDS), flags=re.IGNORECASE))(
+bolt_app.message(keyword=re.compile("|".join(AI_KEYWORDS), flags=re.IGNORECASE))(
     ack=respond_to_slack_within_3_seconds, lazy=[handle_app_message]
 )
+
 
 ChaliceSlackRequestHandler.clear_all_log_handlers()
 logging.basicConfig(format="%(asctime)s %(message)s", level=logging.DEBUG)

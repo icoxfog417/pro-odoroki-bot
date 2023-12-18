@@ -1,3 +1,5 @@
+import xml.etree.ElementTree as ET
+
 PROMPT_FORMAT = """
 1から5の手順に沿い、answerを作成してください。
 
@@ -16,7 +18,7 @@ PROMPT_FORMAT = """
 exampleでいくつか好例を示します。
 {}
 
-では、手順に沿い次のnewsからexampleと同じ構造の文章answerを埋める形で返答してください。
+では、手順に沿い次のanswerをexampleと同じ形式で作成しXMLのみ出力してください。
 
 <answer>
   <news>{}</news>
@@ -38,3 +40,23 @@ def generate(news: str) -> str:
     example = "".join(examples)
     prompt = PROMPT_FORMAT.strip().format(example, news)
     return prompt
+
+
+def retrieve(response: str) -> dict:
+    default = {
+        "news": None,
+        "character": None,
+        "focus": None,
+        "reaction": "す、すごすぎてなんもいえねぇ・・・",
+    }
+
+    try:
+        root = ET.fromstring(response)
+        result = {}
+        for key in default:
+            el = root.find(key)
+            if el is not None and el.text is not None:
+                result[key] = el.text.strip()
+        return result
+    except Exception as ex:  # noqa
+        return default
