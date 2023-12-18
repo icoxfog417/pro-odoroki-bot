@@ -1,4 +1,4 @@
-from aws_chalice.bedrock import Bedrock
+from aws_chalice.chalicelib.bedrock import Bedrock
 
 
 class TestBedrock:

@@ -1,4 +1,4 @@
-import aws_chalice.pro_odoroki_generator as pog
+import aws_chalice.chalicelib.pro_odoroki_generator as pog
 
 
 class TestProOdorokiGenerator:

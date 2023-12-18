@@ -1,9 +1,9 @@
 import logging
 import re
 
-import pro_odoroki_generator as pog
-from bedrock import Bedrock
+import chalicelib.pro_odoroki_generator as pog
 from chalice import Chalice, Response
+from chalicelib.bedrock import Bedrock
 from slack_bolt import Ack, App, Say
 from slack_bolt.adapter.aws_lambda.chalice_handler import ChaliceSlackRequestHandler
 from slack_bolt.adapter.aws_lambda.lambda_s3_oauth_flow import LambdaS3OAuthFlow
