@@ -9,8 +9,12 @@ on:
 jobs:
   ci:
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
     steps:
-      - uses: actions/checkout@v2
+      - name: Git Clone Repository
+        uses: actions/checkout@v4
       - name: Setup Python
         uses: conda-incubator/setup-miniconda@v2
         with:
@@ -18,6 +22,12 @@ jobs:
           python-version: 3.11
           environment-file: environment.yml
           activate-environment: ds
-      - name: Test
+      - name: AWS Configure
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
+          role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/ExecutionRoleForGitHubAction
+          role-session-name: github-action-session
+          aws-region: us-east-1
+      - name: CI/CD
         shell: bash -l {0}
         run: pre-commit run --all-files
