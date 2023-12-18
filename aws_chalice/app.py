@@ -1,13 +1,12 @@
 import logging
 import re
 
+import pro_odoroki_generator as pog
+from bedrock import Bedrock
 from chalice import Chalice, Response
 from slack_bolt import Ack, App, Say
 from slack_bolt.adapter.aws_lambda.chalice_handler import ChaliceSlackRequestHandler
 from slack_bolt.adapter.aws_lambda.lambda_s3_oauth_flow import LambdaS3OAuthFlow
-
-import aws_chalice.pro_odoroki_generator as pog
-from aws_chalice.bedrock import Bedrock
 
 # process_before_response must be True when running on FaaS
 bolt_app = App(process_before_response=True, oauth_flow=LambdaS3OAuthFlow())

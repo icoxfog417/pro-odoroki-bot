@@ -21,7 +21,7 @@ exampleでいくつか好例を示します。
 <answer>
   <news>{}</news>
   <character>
-"""
+"""  # noqa
 
 example1 = """
 <example>
@@ -30,7 +30,8 @@ example1 = """
   <focus>遺伝的アルゴリズムで基盤モデルを学習できる</focus>
   <reaction>これすごい！！\n\n今日Carperがオープンソースにして知ったんだけど、遺伝的アルゴリズムと大規模言語モデルの新たなパラダイムが登場した！大規模言語モデルがさらなる進化を遂げること間違いなし :muscle: :muscle: </reaction>
 </examples>
-"""
+"""  # noqa
+
 
 def generate(news: str) -> str:
     examples = [x.strip() for x in [example1]]
