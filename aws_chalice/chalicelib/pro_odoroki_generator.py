@@ -1,7 +1,7 @@
 import xml.etree.ElementTree as ET
 
 PROMPT_FORMAT = """
-1から5の手順に沿い、answerを作成してください。
+1から3の手順に沿い、answerを作成してください。
 
 1. charactersから投稿者の属性を選択してください
 2. newsの中に含まれる事実から今までにないサービスや性能進化など注目すべきfocusを抽出してください
