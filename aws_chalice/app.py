@@ -17,6 +17,33 @@ logging.getLogger().setLevel(logging.INFO)
 bolt_app = App(process_before_response=True, oauth_flow=LambdaS3OAuthFlow())
 
 
+def pro_odoroki(text: str, ts: str, say: Say, logger: logging.Logger) -> None:
+    _text = mr.exclude_mentions(text)
+    url_pattern = re.compile(r"<https?://\S+>")
+    urls = re.findall(url_pattern, _text)
+    if len(urls) > 0:
+        urls = [u[1:-1] for u in urls]
+        logger.info(f"Message Event: Detect url {urls[0]} so use description.")
+        _text = mr.retrieve_description(urls[0])
+    else:
+        logger.info("Message Event: Use message as text.")
+
+    logger.info(f"Message Event: Create prompt based on {_text}.")
+    prompt_body = pog.generate(_text)
+    logger.info(f"Message Event: Prompt is {prompt_body}.")
+    bedrock = Bedrock()
+    _reply = bedrock.ask_to_claude(prompt_body, instant=True)
+    logger.info(f"Message Event: Generated response: {_reply}")
+    reaction = pog.retrieve(_reply).get("reaction")
+    say(reaction, thread_ts=ts)
+
+    time.sleep(3)
+    # Add mental health advice
+    advice_body = pog.generate_advice(reaction)
+    advice = bedrock.ask_to_claude(advice_body, instant=True)
+    say(advice, thread_ts=ts)
+
+
 def handle_app_mentions(body: dict, say: Say, logger: logging.Logger) -> None:
     logger.info(f"Mention Event: Receive mention: {body}")
 
@@ -24,15 +51,9 @@ def handle_app_mentions(body: dict, say: Say, logger: logging.Logger) -> None:
     # https://api.slack.com/events/app_mention
     event = body["event"]
     # channel = event["channel"]
+    text = event["text"]
     ts = event["ts"]
-
-    # Exclude mention from the message
-    message = mr.exclude_mentions(event["text"])
-    bedrock = Bedrock()
-    reply = bedrock.ask_to_claude(message, version="2.1")
-
-    # Reply to thread
-    say(f"{reply}", thread_ts=ts)
+    pro_odoroki(text, ts, say, logger)
 
 
 def handle_app_message(message: dict, say: Say, logger: logging.Logger) -> None:
@@ -40,33 +61,9 @@ def handle_app_message(message: dict, say: Say, logger: logging.Logger) -> None:
 
     # Please refer the structure of message at the following document
     # https://api.slack.com/events/app_mention
-    _message = mr.exclude_mentions(message["text"])
+    text = message["text"]
     ts = message["ts"]
-    url_pattern = re.compile(r"<https?://\S+>")
-    urls = re.findall(url_pattern, _message)
-    if len(urls) > 0:
-        urls = [u[1:-1] for u in urls]
-        logger.info(f"Message Event: Detect url {urls[0]} so use description.")
-        print(urls)
-        _message = mr.retrieve_description(urls[0])
-    else:
-        print("Missing URL")
-        logger.info("Message Event: Use message as text.")
-
-    logger.info(f"Message Event: Create prompt based on {_message}.")
-    prompt_body = pog.generate(_message)
-    logger.info(f"Message Event: Prompt is {prompt_body}.")
-    bedrock = Bedrock()
-    reply = bedrock.ask_to_claude(prompt_body, instant=True)
-    logger.info(f"Message Event: Generated response: {reply}")
-    reaction = pog.retrieve(reply).get("reaction")
-    say(reaction, thread_ts=ts)
-
-    time.sleep(3)
-    # Add mental health advice
-    advice_body = pog.generate_advice(reaction)
-    advice = bedrock.ask_to_claude(advice_body, version="2.1")
-    say(advice, thread_ts=ts)
+    pro_odoroki(text, ts, say, logger)
 
 
 def respond_to_slack_within_3_seconds(ack: Ack) -> None:
