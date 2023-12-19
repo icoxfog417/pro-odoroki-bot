@@ -1,5 +1,16 @@
 import xml.etree.ElementTree as ET
 
+ODOROKI_TARGETS = [
+    ":bulb:",
+    "ChatGPT",
+    "OpenAI",
+    "Bedrock",
+    "Amazon Q",
+    "Gemini",
+    "DeepMind",
+]
+
+
 PROMPT_FORMAT = """
 1から3の手順に沿い、answerを作成してください。
 
@@ -34,11 +45,24 @@ example1 = """
 </examples>
 """  # noqa
 
+MANAGEMENT_FORMAT = """
+あなたはアンガーマネジメントに長けたプロのメンターです。あなたのクライアントは正確な情報の収集をしたいと考えている専門識者で、次のようなpostに対し信憑性の薄さや誇張表現に対しフラストレーションを感じています。
+
+<post>{}</post>
+
+クライアントに、数分以内にコントロールするための実践的テクニックを1つ会話口調で伝えてください。
+"""  # noqa
+
 
 def generate(news: str) -> str:
     examples = [x.strip() for x in [example1]]
     example = "".join(examples)
     prompt = PROMPT_FORMAT.strip().format(example, news)
+    return prompt
+
+
+def generate_advice(post: str) -> str:
+    prompt = MANAGEMENT_FORMAT.strip().format(post)
     return prompt
 
 
