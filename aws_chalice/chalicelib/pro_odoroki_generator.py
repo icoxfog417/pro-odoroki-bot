@@ -53,17 +53,20 @@ MANAGEMENT_FORMAT = """
 CHARACTERS = [
     "ベンチャー企業経営者",
     "ソーシャルメディアのインフルエンサー",
-    "芸能人",
     "短時間でお金が稼げる本の執筆者",
     "起業セミナーに頻繁に出席している学生",
 ]
 
 
-def generate(news: str) -> str:
-    character = random.choice(CHARACTERS)
+def generate(news: str, character: str="") -> str:
+    if character:
+        _character = character
+    else:
+        _character = random.choice(CHARACTERS)
+
     examples = [x.strip() for x in [example1]]
     example = "".join(examples)
-    prompt = PROMPT_FORMAT.strip().format(character, example, news)
+    prompt = PROMPT_FORMAT.strip().format(_character, example, news)
     return prompt
 
 

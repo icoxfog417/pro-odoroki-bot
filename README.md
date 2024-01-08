@@ -13,3 +13,11 @@ Reply with a surprising message to AI-related topics. Not only by sending the me
 
 * [Slack Bolt](https://slack.dev/bolt-js/ja-jp/tutorial/getting-started)
 * [AWS Chalice](https://aws.github.io/chalice/)
+
+## Evaluation
+
+To evaluate generated odoroki, please execute the following command.
+
+```
+python -m evaluation
+```

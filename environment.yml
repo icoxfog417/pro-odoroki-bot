@@ -8,6 +8,8 @@ dependencies:
   - pytest
   - pytest-cov
   - pre-commit
+  - pandas
+  - scikit-learn
   - pip
   - pip:
     - -r aws_chalice/requirements.txt
