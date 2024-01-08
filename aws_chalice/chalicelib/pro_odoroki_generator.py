@@ -58,7 +58,7 @@ CHARACTERS = [
 ]
 
 
-def generate(news: str, character: str="") -> str:
+def generate(news: str, character: str = "") -> str:
     if character:
         _character = character
     else:
